@@ -2,6 +2,8 @@ import format from 'date-fns/format';
 import ptBR from 'date-fns/locale/pt-BR';
 import styles from './styles.module.scss';
 
+import Link from 'next/link';
+
 export function Header() {
 
 
@@ -11,7 +13,12 @@ export function Header() {
 
     return (
         <header className={styles.headerContainer}>
-            <img src="/Logo.svg" alt="Podcastr" />
+
+            <Link href="/">
+                <button type="button">
+                    <img src="/Logo.svg" alt="Podcastr" />
+                </button>
+            </Link>
 
             <p>O melhor para você ouvir, sempre</p>
 

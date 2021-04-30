@@ -1,4 +1,11 @@
 .headerContainer {
+    button {
+        border-radius: 0.75rem;
+        border: 0;
+        font-size: 0;
+
+        background-color: transparent;
+    }
     background: var(--white);
     height: 6.5rem;
 
@@ -9,13 +16,13 @@
 
     border-bottom: 1px solid var(--gray-100);
 
-    p{
+    p {
         margin-left: 2rem;
         padding: 0.25rem 0 0.25rem 2rem;
         border-left: 1px solid var(--gray-100);
     }
 
-    span{
+    span {
         margin-left: auto;
         text-transform: capitalize;
     }
