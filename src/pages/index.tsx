@@ -1,14 +1,14 @@
 import { format, parseISO } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
 import { GetStaticProps } from 'next';
+import Head from 'next/head';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useContext } from 'react';
-
-import { PlayerContext } from '../contexts/PlayerContext';
+import { usePlayer } from '../contexts/PlayerContext';
 import { api } from '../services/api';
 import { convertDurationToTimeString } from '../utils/convertDurationToTimeString';
 import styles from './home.module.scss';
+
 
 
 type Episode = {
@@ -30,35 +30,40 @@ type HomeProps = {
 export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
 
 
-  const { play } = useContext(PlayerContext)
+  const { playList } = usePlayer();
+
+  const episodeList = [...latestEpisodes, ...allEpisodes];
 
   return (
     <div className={styles.homepage}>
+      <Head>
+        <title>Home | Podcastr</title>
+      </Head>
       <section className={styles.latestEpisodes}>
         <h2>Útimos lançamentos </h2>
 
         <ul>
-          {latestEpisodes.map(ep => {
+          {latestEpisodes.map((episode, index) => {
             return (
-              <li key={ep.id}>
+              <li key={episode.id}>
                 <Image
                   width={200}
                   height={200}
-                  src={ep.thumbnail}
-                  alt={ep.title}
+                  src={episode.thumbnail}
+                  alt={episode.title}
                   objectFit="cover"
                 />
 
                 <div className={styles.episodeDetails}>
-                  <Link href={`/episodes/${ep.id}`}>
-                    <a >{ep.title}</a>
+                  <Link href={`/episodes/${episode.id}`}>
+                    <a >{episode.title}</a>
                   </Link>
-                  <p>{ep.members}</p>
-                  <span>{ep.publishedAT}</span>
-                  <span>{ep.durationAsString}</span>
+                  <p>{episode.members}</p>
+                  <span>{episode.publishedAT}</span>
+                  <span>{episode.durationAsString}</span>
                 </div>
 
-                <button type="button" onClick={() => play(ep)}>
+                <button type="button" onClick={() => playList(episodeList, index)}>
                   <img src="/play-green.svg" alt="Tocar episódio" />
                 </button>
               </li>
@@ -82,28 +87,28 @@ export default function Home({ latestEpisodes, allEpisodes }: HomeProps) {
           </thead>
 
           <tbody>
-            {allEpisodes.map(allEp => {
+            {allEpisodes.map((episode, index) => {
               return (
-                <tr key={allEp.id}>
+                <tr key={episode.id}>
                   <td style={{ width: 72 }}>
                     <Image
                       width={120}
                       height={120}
-                      src={allEp.thumbnail}
-                      alt={allEp.title}
+                      src={episode.thumbnail}
+                      alt={episode.title}
                       objectFit="cover"
                     />
                   </td>
-                  <Link href={`/episodes/${allEp.id}`}>
+                  <Link href={`/episodes/${episode.id}`}>
                     <td>
-                      <a >{allEp.title}</a>
+                      <a >{episode.title}</a>
                     </td>
                   </Link>
-                  <td>{allEp.members}</td>
-                  <td style={{ width: 100 }}>{allEp.publishedAT}</td>
-                  <td>{allEp.durationAsString}</td>
+                  <td>{episode.members}</td>
+                  <td style={{ width: 100 }}>{episode.publishedAT}</td>
+                  <td>{episode.durationAsString}</td>
                   <td>
-                    <button type="button" onClick={() => play(allEp)}>
+                    <button type="button" onClick={() => playList(episodeList, index + latestEpisodes.length)}>
                       <img src="/play-green.svg" alt="Tocar episódio" />
                     </button>
                   </td>
